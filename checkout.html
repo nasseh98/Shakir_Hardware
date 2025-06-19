@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Shakir Hardware</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #0b0b0b;
+      font-family: 'Segoe UI', sans-serif;
+      color: #f5c518;
+      margin: 0;
+      padding: 20px;
+    }
+    h2, h3 {
+      color: #f5c518;
+    }
+    .checkout-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .form-section, .summary-section {
+      flex: 1 1 400px;
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #fff;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #333;
+      border-radius: 5px;
+      margin-top: 5px;
+      background-color: #222;
+      color: #fff;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #f5c518;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #ffe45c;
+    }
+    .cart-item {
+      border-bottom: 1px solid #333;
+      padding: 10px 0;
+    }
+    .total-line {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #f5c518;
+    }
+    .success-message {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #28a745;
+      color: #fff;
+      border-radius: 6px;
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .checkout-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Header -->
+<!-- Header -->
+<header class="index_header">
+  <div class="logo-container">
+    <img src="images/shaki.png" alt="Shakir Hardware Logo" class="logo-img">
+  
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+  <h2>Checkout</h2>
+  <div class="checkout-container">
+    <div class="form-section">
+      <form id="checkoutForm">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email">
+
+        <label for="address">Delivery Location</label>
+        <textarea id="address" rows="3" required></textarea>
+
+        <label for="method">Delivery Method</label>
+        <select id="method" required>
+          <option value="">Select</option>
+          <option value="Pickup">Pickup</option>
+          <option value="Delivery">Delivery</option>
+        </select>
+
+        <button type="button" onclick="confirmOrder()">🟢 Confirm & Send on WhatsApp</button>
+
+      </form>
+      <div id="successMessage" class="success-message">
+        ✅ Your order has been sent via email. Thank you!
+      </div>
+    </div>
+    <div class="summary-section">
+      <h3>Cart Summary</h3>
+      <div id="cartSummary"></div>
+      <p class="total-line">Total: <span id="checkoutTotal">Ksh. 0</span></p>
+    </div>
+  </div>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartSummary = document.getElementById("cartSummary");
+    const checkoutTotal = document.getElementById("checkoutTotal");
+    const successMessage = document.getElementById("successMessage");
+
+    let total = 0;
+    cart.forEach(item => {
+      const price = parseFloat(item.price.replace(/[^\d.]/g, "")) || 0;
+      const subtotal = price * item.qty;
+      total += subtotal;
+
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <strong>${item.name}</strong> x ${item.qty}<br>
+        Ksh. ${subtotal.toFixed(2)}
+      `;
+      cartSummary.appendChild(div);
+    });
+
+  checkoutTotal.textContent = `Ksh. ${total.toFixed(2)}`;
+
+  function confirmOrder() {
+    const name = document.getElementById("fullName").value;
+    const phone = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
+    const address = document.getElementById("address").value;
+    const method = document.getElementById("method").value;
+
+    if (!name || !phone || !address || !method) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    let message = `Order from Shakir Hardware%0A--------------------%0A`;
+    cart.forEach(item => {
+      message += `${item.name} x ${item.qty}%0A`;
+    });
+
+    message += `%0A🧾 Total: Ksh. ${total.toFixed(2)}%0A`;
+    message += `👤 Name: ${name}%0A📱 Phone: ${phone}%0A📧 Email: ${email}%0A📍 Address: ${address}%0A🚚 Method: ${method}`;
+
+    const phoneNumber = "254113552763"; // Replace with your WhatsApp number, no plus sign
+    const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+    localStorage.removeItem("cart");
+    document.getElementById("checkoutForm").reset();
+    cartSummary.innerHTML = "";
+    checkoutTotal.textContent = "Ksh. 0";
+    successMessage.style.display = "block";
+
+    window.open(whatsappLink, "_blank");
+  }
+</script>
+
+
+</body>
+</html>

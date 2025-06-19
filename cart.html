@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Cart - shakir Hardware</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #000;
+      color: #f5c518;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .main-content {
+      width: 90%;
+      margin: auto;
+      padding: 30px 0;
+    }
+    h2 {
+      color: #f5c518;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      background-color: #111;
+      border-collapse: collapse;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+    th, td {
+      padding: 14px;
+      border: 1px solid #444;
+      text-align: center;
+    }
+    th {
+      background-color: #f5c518;
+      color: #000;
+    }
+    td img {
+      width: 70px;
+      border-radius: 8px;
+    }
+    .total {
+      text-align: right;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #f5c518;
+    }
+    .cart-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .cart-buttons button {
+      padding: 12px 25px;
+      border: none;
+      background: #f5c518;
+      color: #000;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .cart-buttons button:hover {
+      background: #ffd700;
+    }
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .navbar {
+      background-color: #111;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .logo {
+      font-size: 24px;
+      color: #f5c518;
+    }
+    .navbar a {
+      color: #f5c518;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<header class="index_header">
+  <div class="logo-container">
+    <img src="images/shaki.png" alt="Shakir Hardware Logo" class="logo-img">
+  
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="shop.html">Products</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+  <main class="main-content">
+    <h2>Your Shopping Cart</h2>
+    <div id="cartContainer"></div>
+    <div class="total" id="cartTotal"></div>
+    <div class="cart-buttons">
+      <button onclick="clearCart()">🗑 Clear Cart</button>
+      <button onclick="window.location.href='checkout.html'">🧾 Checkout</button>
+    </div>
+  </main>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function renderCart() {
+      const container = document.getElementById("cartContainer");
+      const totalEl = document.getElementById("cartTotal");
+
+      if (cart.length === 0) {
+        container.innerHTML = "<p>Your cart is empty.</p>";
+        totalEl.textContent = "";
+        return;
+      }
+
+      let total = 0;
+      let html = "<table><thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Qty</th><th>Subtotal</th><th>Action</th></tr></thead><tbody>";
+
+      cart.forEach((item, i) => {
+        const price = parseFloat(item.price.replace(/[^\d.]/g, "")) || 0;
+        const subtotal = item.qty * price;
+        total += subtotal;
+
+        html += `<tr>
+          <td><img src="${item.image}" alt="${item.name}" /></td>
+          <td>${item.name}</td>
+          <td>Ksh. ${price.toFixed(2)}</td>
+          <td><input type="number" min="1" value="${item.qty}" onchange="updateQty(${i}, this.value)" /></td>
+          <td>Ksh. ${subtotal.toFixed(2)}</td>
+          <td><button onclick="removeItem(${i})">❌</button></td>
+        </tr>`;
+      });
+
+      html += "</tbody></table>";
+      container.innerHTML = html;
+      totalEl.textContent = `Total: Ksh. ${total.toFixed(2)}`;
+    }
+
+    function updateQty(index, value) {
+      cart[index].qty = parseInt(value);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function clearCart() {
+      if (confirm("Clear the entire cart?")) {
+        cart = [];
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      }
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

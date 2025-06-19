@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shakir Hardware Shop</title>
+  <link rel="stylesheet" href="sytles.css" />
+  
+</head>
+<body>
+  <!-- Navbar -->
+<!-- Header -->
+<header class="index_header">
+  <div class="logo-container">
+    <img src="images/shaki.png" alt="Shakir Hardware Logo" class="logo-img">
+  
+  </div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html" >Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="shop.html" class="active">Shop</a></li>
+      <li><a href="cart.html">Cart</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search for products..." />
+  </div>
+
+  <main class="main-content">
+    <!-- Sidebar: Category Filter -->
+    <aside class="sidebar">
+      <div class="category-filter">
+        <h3>Categories</h3>
+        <ul id="category-list">
+          <li data-category="all">All</li>
+          <li data-category="Tools">Tools</li>
+          <li data-category="Cement">Cement</li>
+          <li data-category="Pipes">Pipes</li>
+          <li data-category="Paints">Paints</li>
+          <li data-category="Cement">Cement</li>
+          <li data-category="Taps & Faucets">Taps & Faucets</li>
+          <li data-category="Iron Sheets">Iron Sheets</li>
+          <li data-category="Plumbing">Plumbing</li>
+          <li data-category="Electrical Supplies">Electrical Supplies</li>
+          <li data-category="Tiles">Tiles</li>
+          <li data-category="Gutter Fittings">Gutter Fittings</li>
+          <li data-category="Welding Supplies">Welding Supplies</li>
+          <li data-category="Water Storage">Water Storage</li>
+          <li data-category="Bolts and Screws">Bolts and Screws</li>
+          <li data-category="Doors and Windows">Doors and Windows </li>
+          <li data-category="Steel Bars">Steel Bars </li>
+          
+        
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Product Section -->
+    <section class="products-section">
+      <!-- Admin Access -->
+      <section class="admin-access">
+        <button id="adminToggle">👤 Admin Access</button>
+        <div id="adminForm" style="display:none; margin-top:10px;">
+          <input type="password" id="adminPassword" placeholder="Enter admin password" />
+          <button id="submitAdmin">Submit</button>
+        </div>
+      </section>
+
+      <!-- Product Upload Form (hidden by default) -->
+      <section class="upload-form">
+        <h2>Add New Product</h2>
+        <form id="productForm">
+          <input type="text" id="name" placeholder="Product Name" required />
+          <input type="text" id="price" placeholder="Price (e.g. $59.99)" required />
+
+          
+
+          <input type="text" id="description" placeholder="Short Description" required />
+          <input type="file" id="imageUpload" accept="image/*" />
+          <img id="previewImage" src="" style="width:100%; height: 200px; margin-top:10px;" />
+          <button type="submit">Add Product</button>
+        </form>
+
+      </section>
+
+      <!-- Product Grid -->
+      <section class="product-grid" id="productList"></section>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button id="prevPage">Prev</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <div id="cartMessage" class="cart-message">✅ Item added to cart</div>
+
+</body>
+</html>

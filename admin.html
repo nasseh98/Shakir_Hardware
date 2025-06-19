@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Product Manager</title>
+  <link rel="stylesheet" href="sytles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">Shakir<span>Hardware</span> Admin</div>
+    <a href="index.html" style="color:gold; font-weight:bold;">⬅ Back to Shop</a>
+  </nav>
+
+  <main class="main-content">
+    <section class="products-section" style="width:100%;">
+      <h2 style="margin-bottom: 20px;">Manage Products</h2>
+
+      <!-- Product Upload Form -->
+      <section class="upload-form">
+        <form id="productForm">
+          <input type="hidden" id="productId" />
+          <input type="text" id="name" placeholder="Product Name" required />
+          <input type="text" id="price" placeholder="Price (e.g. $59.99)" required />
+
+          <select id="category" required>
+            <option value="">Select Category</option>
+            <option value="Tools">Tools</option>
+            <option value="Pipes">Pipes</option>
+            <option value="Paints">Paints</option>
+            <option value="Cement">Cement</option>
+            <option value="Taps & Faucets">Taps & Faucets</option>
+            <option value="Iron Sheets">Iron Sheets</option>
+            <option value="Electrical Supplies">Electrical Supplies</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="Tiles">Tiles</option>
+            <option value="Gutter Fittings">Gutter Fittings</option>
+            <option value="Welding Supplies">Welding Supplies</option>
+            <option value="Water Storage">Water Storage</option>
+            <option value="Bolts & Screws">Bolts & Screws</option>
+            <option value="Door & Windows">Door & Windows</option>
+            <option value="Steel Bars">Steel Bars</option>
+          </select>
+
+          <input type="text" id="description" placeholder="Short Description" required />
+          <input type="file" id="imageUpload" accept="image/*" />
+          <img id="previewImage" src="" style="width:150px; margin-top:10px;" />
+          <button type="submit">Save Product</button>
+        </form>
+      </section>
+
+      <!-- List of Products -->
+      <section class="product-grid" id="adminProductList"></section>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("productForm");
+    const productIdInput = document.getElementById("productId");
+    const imageInput = document.getElementById("imageUpload");
+    const previewImage = document.getElementById("previewImage");
+    const productList = document.getElementById("adminProductList");
+
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+
+    // Preview Image
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          previewImage.src = reader.result;
+          previewImage.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Save Product
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const id = productIdInput.value || Date.now();
+      const name = document.getElementById("name").value;
+      const price = document.getElementById("price").value;
+      const category = document.getElementById("category").value;
+      const description = document.getElementById("description").value;
+
+      const existing = products.find(p => p.id == id);
+
+      const saveProduct = (image) => {
+        const product = { id, name, price, category, description, image };
+        if (existing) {
+          products = products.map(p => (p.id == id ? product : p));
+        } else {
+          products.unshift(product);
+        }
+        localStorage.setItem("products", JSON.stringify(products));
+        form.reset();
+        productIdInput.value = "";
+        previewImage.src = "";
+        renderProducts();
+      };
+
+      if (imageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => saveProduct(reader.result);
+        reader.readAsDataURL(imageInput.files[0]);
+      } else {
+        saveProduct(existing ? existing.image : "");
+      }
+    });
+
+    // Render Products
+    function renderProducts() {
+      productList.innerHTML = "";
+      products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${p.image}" />
+          <h4>${p.name}</h4>
+          <p>${p.price}</p>
+          <p><strong>${p.category}</strong></p>
+          <p>${p.description}</p>
+          <button onclick="editProduct(${p.id})">✏ Edit</button>
+          <button onclick="deleteProduct(${p.id})" style="background:red; color:white; margin-top:5px;">🗑 Delete</button>
+        `;
+        productList.appendChild(card);
+      });
+    }
+
+    // Edit Product
+    window.editProduct = (id) => {
+      const p = products.find(p => p.id == id);
+      if (p) {
+        productIdInput.value = p.id;
+        document.getElementById("name").value = p.name;
+        document.getElementById("price").value = p.price;
+        document.getElementById("category").value = p.category;
+        document.getElementById("description").value = p.description;
+        previewImage.src = p.image;
+      }
+    };
+
+    // Delete Product
+    window.deleteProduct = (id) => {
+      if (confirm("Delete this product?")) {
+        products = products.filter(p => p.id != id);
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts();
+      }
+    };
+
+    renderProducts();
+  </script>
+</body>
+</html>
