@@ -148,32 +148,31 @@ function confirmOrder() {
     return;
   }
 
-  let orderText = "";
+  let message = `🧾 *Order from Shakir Hardware*%0A%0A`;
+  message += `📦 *Items:*%0A`;
+
   cart.forEach(item => {
-    orderText += `${item.name} x ${item.qty}\\n`;
+    message += `- ${item.name} x ${item.qty}%0A`;
   });
 
-  const params = {
-    name,
-    phone,
-    email,
-    address,
-    method,
-    order: orderText,
-    total: `Ksh. ${total.toFixed(2)}`
-  };
+  message += `%0A💰 *Total:* Ksh. ${total.toFixed(2)}%0A%0A`;
+  message += `👤 *Customer Info:*%0A`;
+  message += `- Name: ${name}%0A`;
+  message += `- Phone: ${phone}%0A`;
+  message += `- Email: ${email}%0A`;
+  message += `- Address: ${address}%0A`;
+  message += `- Delivery Method: ${method}`;
 
-  emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", params)
-    .then(() => {
-      localStorage.removeItem("cart");
-      document.getElementById("checkoutForm").reset();
-      document.getElementById("successMessage").style.display = "block";
-      cartSummary.innerHTML = "";
-      checkoutTotal.textContent = "Ksh. 0";
-    })
-    .catch(error => {
-      alert("❌ Failed to send email: " + error);
-    });
+  const phoneNumber = "254113552763"; // Shakir Hardware WhatsApp number
+  const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+  localStorage.removeItem("cart");
+  document.getElementById("checkoutForm").reset();
+  cartSummary.innerHTML = "";
+  checkoutTotal.textContent = "Ksh. 0";
+  successMessage.style.display = "block";
+
+  window.open(whatsappLink, "_blank");
 }
 
 
