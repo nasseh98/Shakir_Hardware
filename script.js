@@ -148,22 +148,22 @@ function confirmOrder() {
     return;
   }
 
-  let message = `🧾 *Order from Shakir Hardware*%0A%0A`;
-  message += `📦 *Items:*%0A`;
+  let message = `Order from Shakir Hardware\n\n`;
 
   cart.forEach(item => {
-    message += `- ${item.name} x ${item.qty}%0A`;
+    message += `Item: ${item.name}\n`;
+    message += `Quantity: ${item.qty}\n`;
+    message += `Price per item: Ksh. ${item.price}\n\n`;
   });
 
-  message += `%0A💰 *Total:* Ksh. ${total.toFixed(2)}%0A%0A`;
-  message += `👤 *Customer Info:*%0A`;
-  message += `- Name: ${name}%0A`;
-  message += `- Phone: ${phone}%0A`;
-  message += `- Email: ${email}%0A`;
-  message += `- Address: ${address}%0A`;
-  message += `- Delivery Method: ${method}`;
+  message += `Total: Ksh. ${total.toFixed(2)}\n\n`;
+  message += `Name: ${name}\n`;
+  message += `Phone: ${phone}\n`;
+  message += `Email: ${email}\n`;
+  message += `Address: ${address}\n`;
+  message += `Delivery Method: ${method}`;
 
-  const phoneNumber = "254113552763"; // Shakir Hardware WhatsApp number
+  const phoneNumber = "254708359143"; // Replace with your WhatsApp number
   const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   localStorage.removeItem("cart");
