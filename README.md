@@ -1,7 +1,7 @@
 # 🛠️ Hardware Shop Website  
 
-A modern, responsive, and interactive **Hardware Shop Website** built using **HTML, CSS, and JavaScript that also includes a google maps API**.  
-This project simulates a basic e-commerce experience with product listings, cart management, checkout, and an admin interface for uploading products by categories and price.  
+A modern, responsive and interactive **Hardware Shop Website** built using **HTML, CSS and JavaScript that also includes a google maps API**.  
+This project simulates a basic e-commerce experience with product listings, cart management, checkout and an admin interface for uploading products by categories and price.  
 
 ---
 
