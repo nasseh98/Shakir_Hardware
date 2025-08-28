@@ -8,6 +8,8 @@ This project simulates a basic e-commerce experience with product listings, cart
 ## 🌐 Live Demo  
 Check out the live site here: [Hardware Shop Live](https://nasseh98.github.io/Shakir_Hardware/)  
 
+To acees the admin file go to shop page and login using (admin123 as password)
+
 ---
 
 
