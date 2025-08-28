@@ -6,7 +6,7 @@ This project simulates a basic e-commerce experience with product listings, cart
 ---
 
 ## 🌐 Live Demo  
-Check out the live site here: [Hardware Shop Live](https://nasseh98.github.io/Shakir_Hardware/admin.html)  
+Check out the live site here: [Hardware Shop Live](https://nasseh98.github.io/Shakir_Hardware/)  
 
 ---
 
